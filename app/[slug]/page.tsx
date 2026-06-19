@@ -3,12 +3,14 @@ import { db } from "@/lib/db";
 import styles from "./styles.module.css";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function PublicProfile({ params }: Props) {
+  const { slug } = await params;
+
   const profile = await db.profile.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       user: {
         select: { name: true, surname: true, username: true },

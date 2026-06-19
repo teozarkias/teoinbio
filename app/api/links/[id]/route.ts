@@ -5,16 +5,17 @@ import { db } from "@/lib/db";
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const link = await db.link.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { profile: true },
     });
 
@@ -26,7 +27,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await db.link.delete({ where: { id: params.id } });
+    await db.link.delete({ where: { id } });
 
     return NextResponse.json({ message: "Link deleted" });
   } catch (error) {
@@ -40,9 +41,10 @@ export async function DELETE(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -51,7 +53,7 @@ export async function PATCH(
     const { title, url } = await req.json();
 
     const link = await db.link.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { profile: true },
     });
 
@@ -64,7 +66,7 @@ export async function PATCH(
     }
 
     const updated = await db.link.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(title && { title }),
         ...(url && { url }),
