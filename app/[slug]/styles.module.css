@@ -1,0 +1,118 @@
+.container {
+  min-height: 100vh;
+  background: #f8f8fc;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1a1a2e;
+  margin-bottom: 0.2rem;
+  text-align: center;
+}
+
+.username {
+  font-size: 14px;
+  color: #6b6b78;
+  margin-bottom: 0.85rem;
+  text-align: center;
+}
+
+.bio {
+  font-size: 14px;
+  color: #4b4b58;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 360px;
+  margin-bottom: 0.5rem;
+}
+
+.links {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.empty {
+  font-size: 14px;
+  color: #6b6b78;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.linkCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: white;
+  border: 1px solid #e4e4f0;
+  border-radius: 14px;
+  text-decoration: none;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.linkCard:hover {
+  border-color: #c7c7f0;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+  transform: translateY(-1px);
+}
+
+.linkTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.linkArrow {
+  font-size: 14px;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.footer {
+  margin-top: 2.5rem;
+  font-size: 12px;
+  color: #9999aa;
+  text-align: center;
+}
+
+.brand {
+  color: #6366f1;
+  font-weight: 600;
+}
