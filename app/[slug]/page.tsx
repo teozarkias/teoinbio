@@ -6,6 +6,15 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+interface Link {
+  id: string;
+  title: string;
+  url: string;
+  position: number;
+  profileId: string;
+  createdAt: Date;
+}
+
 export default async function PublicProfile({ params }: Props) {
   const { slug } = await params;
 
@@ -39,7 +48,7 @@ export default async function PublicProfile({ params }: Props) {
           {profile.links.length === 0 && (
             <p className={styles.empty}>No links yet.</p>
           )}
-          {profile.links.map((link) => (
+          {profile.links.map((link: Link) => (
             <a
               key={link.id}
               href={link.url}
