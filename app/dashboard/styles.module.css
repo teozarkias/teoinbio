@@ -371,3 +371,42 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .logoText {
+    display: none;
+  }
+
+  .viewLink,
+  .signOutBtn {
+    font-size: 12px;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .main {
+    padding: 1.25rem 1rem;
+    gap: 1.25rem;
+  }
+
+  .welcomeTitle {
+    font-size: 20px;
+  }
+
+  .section {
+    padding: 1.25rem 1rem;
+  }
+
+  .linkItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .deleteBtn {
+    align-self: flex-end;
+  }
+}
