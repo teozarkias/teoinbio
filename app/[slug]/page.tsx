@@ -38,20 +38,12 @@ export default async function PublicProfile({ params }: Props) {
 
   if (!profile) notFound();
 
-  const isOwner = session?.user?.id === profile.userId;
   const initials =
     `${profile.user.name[0]}${profile.user.surname[0]}`.toUpperCase();
   const fullName = `${profile.user.name} ${profile.user.surname}`;
 
   return (
     <div className={styles.container}>
-      {isOwner && (
-        <div className={styles.ownerBar}>
-          <Link href="/dashboard" className={styles.dashboardBtn}>
-            ← Back to dashboard
-          </Link>
-        </div>
-      )}
       <div className={styles.card}>
         <div className={styles.avatar}>{initials}</div>
         <h1 className={styles.name}>{fullName}</h1>
