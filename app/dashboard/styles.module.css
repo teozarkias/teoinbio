@@ -95,7 +95,10 @@
 }
 
 .viewLink:hover {
-  background: #f3f4ff;
+  background: #6366f1;
+  color: white;
+  transition: background 0.5s;
+  border-radius: 20px;
 }
 
 .signOutBtn {
@@ -111,7 +114,10 @@
 }
 
 .signOutBtn:hover {
-  background: #f8f8fc;
+  background: red;
+  color: white;
+  border-radius: 20px;
+  transition: background 0.5s;
 }
 
 .main {

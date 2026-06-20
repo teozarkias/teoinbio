@@ -2,9 +2,10 @@
   min-height: 100vh;
   background: #f8f8fc;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 3rem 1rem;
+  position: relative;
 }
 
 .card {
@@ -115,4 +116,30 @@
 .brand {
   color: #6366f1;
   font-weight: 600;
+}
+
+.ownerBar {
+  position: absolute;
+  top: 1.75rem;
+  left: 3rem;
+}
+
+.dashboardBtn {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6366f1;
+  text-decoration: none;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #e4e4f0;
+  background: white;
+  transition: background 0.15s;
+}
+
+.dashboardBtn:hover {
+  background: #6366f1;
+  color: white;
+  transition: background 0.5s;
+  border-radius: 20px;
 }

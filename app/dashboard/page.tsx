@@ -143,7 +143,7 @@ export default function Dashboard() {
               rel="noopener noreferrer"
               className={styles.viewLink}
             >
-              View page ↗
+              Profile
             </a>
           )}
           <button
@@ -238,7 +238,7 @@ export default function Dashboard() {
                   onChange={(e) =>
                     setNewLink({ ...newLink, title: e.target.value })
                   }
-                  placeholder="My Website"
+                  placeholder="Instagram"
                   required
                 />
               </div>
