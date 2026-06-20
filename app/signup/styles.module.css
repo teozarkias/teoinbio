@@ -174,7 +174,11 @@
 
   .row {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 1.25rem;
+  }
+
+  .field {
+    padding-top: 0;
   }
 
   .title {
