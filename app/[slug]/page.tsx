@@ -4,7 +4,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import styles from "./styles.module.css";
 import Link from "next/link";
-
+import { getPlatform } from "@/lib/platforms";
+import PlatformIcon from "@/components/PlatformIcon";
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -13,6 +14,7 @@ interface ProfileLink {
   id: string;
   title: string;
   url: string;
+  platform: string | null;
   position: number;
   profileId: string;
   createdAt: Date;
@@ -21,7 +23,7 @@ interface ProfileLink {
 export default async function PublicProfile({ params }: Props) {
   const { slug } = await params;
 
-  const [profile, session] = await Promise.all([
+  const [profile] = await Promise.all([
     db.profile.findUnique({
       where: { slug },
       include: {
@@ -62,7 +64,10 @@ export default async function PublicProfile({ params }: Props) {
               rel="noopener noreferrer"
               className={styles.linkCard}
             >
-              <span className={styles.linkTitle}>{link.title}</span>
+              <div className={styles.linkLeft}>
+                <PlatformIcon platform={link.platform} title={link.title} />
+                <span className={styles.linkTitle}>{link.title}</span>
+              </div>
               <span className={styles.linkArrow}>↗</span>
             </a>
           ))}

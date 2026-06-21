@@ -2,58 +2,83 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { error } from "next/dist/build/output/log";
+import { buildUrl, getPlatform } from "@/lib/platforms";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const profile = await db.profile.findUnique({
+      where: { userId: session.user.id },
+      include: { links: { orderBy: { position: "asc" } } },
+    });
+
+    if (!profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(profile.links);
+  } catch (error) {
+    console.error("GET /api/links error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
-
-  const profile = await db.profile.findUnique({
-    where: { userId: session.user.id },
-    include: { links: { orderBy: { position: "asc" } } },
-  });
-
-  if (!profile) {
-    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(profile.links);
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  const { title, url } = await req.json();
+    const { platformId, username } = await req.json();
 
-  if (!title || !url) {
+    if (!platformId || !username) {
+      return NextResponse.json(
+        { error: "Platform and username are required" },
+        { status: 400 },
+      );
+    }
+
+    const platform = getPlatform(platformId);
+    if (!platform) {
+      return NextResponse.json({ error: "Invalid platform" }, { status: 400 });
+    }
+
+    const url = buildUrl(platformId, username);
+    const title = platform.name;
+
+    const profile = await db.profile.findUnique({
+      where: { userId: session.user.id },
+      include: { links: true },
+    });
+
+    if (!profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
+    const link = await db.link.create({
+      data: {
+        title,
+        url,
+        platform: platformId,
+        position: profile.links.length,
+        profileId: profile.id,
+      },
+    });
+
+    return NextResponse.json(link, { status: 201 });
+  } catch (error) {
+    console.error("POST /api/links error:", error);
     return NextResponse.json(
-      { error: "Both title and url are required." },
-      { status: 400 },
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
-
-  const profile = await db.profile.findUnique({
-    where: { userId: session.user.id },
-    include: { links: true },
-  });
-
-  if (!profile) {
-    return NextResponse.json({ error: "Profile not found." }, { status: 404 });
-  }
-
-  const link = await db.link.create({
-    data: {
-      title,
-      url,
-      position: profile.links.length,
-      profileId: profile.id,
-    },
-  });
-
-  return NextResponse.json(link, { status: 201 });
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
+import { platforms } from "@/lib/platforms";
 
 interface Link {
   id: string;
@@ -23,7 +24,10 @@ export default function Dashboard() {
 
   const [links, setLinks] = useState<Link[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [newLink, setNewLink] = useState({ title: "", url: "" });
+  const [newLink, setNewLink] = useState({
+    platformId: "instagram",
+    username: "",
+  });
   const [bio, setBio] = useState("");
   const [slug, setSlug] = useState("");
   const [addOpen, setAddOpen] = useState(false);
@@ -73,7 +77,7 @@ export default function Dashboard() {
     });
 
     if (res.ok) {
-      setNewLink({ title: "", url: "" });
+      setNewLink({ platformId: "instagram", username: "" });
       setAddOpen(false);
       await fetchLinks();
       showToast("Link added");
@@ -230,28 +234,41 @@ export default function Dashboard() {
           {addOpen && (
             <form onSubmit={handleAddLink} className={styles.addForm}>
               <div className={styles.field}>
-                <label className={styles.label}>Title</label>
+                <label className={styles.label}>Platform</label>
+                <select
+                  className={styles.select}
+                  value={newLink.platformId}
+                  onChange={(e) =>
+                    setNewLink({ ...newLink, platformId: e.target.value })
+                  }
+                >
+                  {platforms.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>
+                  {newLink.platformId === "whatsapp"
+                    ? "Phone number"
+                    : newLink.platformId === "linkedin" ||
+                        newLink.platformId === "facebook"
+                      ? "Profile URL"
+                      : "Username"}
+                </label>
                 <input
                   type="text"
                   className={styles.input}
-                  value={newLink.title}
+                  value={newLink.username}
                   onChange={(e) =>
-                    setNewLink({ ...newLink, title: e.target.value })
+                    setNewLink({ ...newLink, username: e.target.value })
                   }
-                  placeholder="Instagram"
-                  required
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>URL</label>
-                <input
-                  type="url"
-                  className={styles.input}
-                  value={newLink.url}
-                  onChange={(e) =>
-                    setNewLink({ ...newLink, url: e.target.value })
+                  placeholder={
+                    platforms.find((p) => p.id === newLink.platformId)
+                      ?.placeholder || ""
                   }
-                  placeholder="https://example.com"
                   required
                 />
               </div>
